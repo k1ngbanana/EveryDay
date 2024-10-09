@@ -1,9 +1,9 @@
 # BLOG
 
 <p>
-<a href="https://github.com/k1ngbanana/EveryDay">GitHub</a>
+<a target="_blank" href="https://github.com/k1ngbanana/EveryDay">GitHub</a>
 <span>｜</span>
-<a href="https://blog.banana.top/">Blog</a>
+<a target="_blank" href="https://blog.banana020.top/">Blog</a>
 </p>
 
 ## Hi~
