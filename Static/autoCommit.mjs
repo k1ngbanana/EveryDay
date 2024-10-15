@@ -23,7 +23,7 @@ function main() {
 
     if (blogFiles.length) {
       insertCatalogText({ filePath: path.join(getCurrentFolder(), "../CATALOG.md"), insertTextArray: contentArr });
-      // insertSidebarText({ filePath: path.join(getCurrentFolder(), "../_sidebar.md"), title: `- ${blogFiles[0].split("/")[0]}`, insertTextArray: contentArr });
+      insertSidebarText({ filePath: path.join(getCurrentFolder(), "../_sidebar.md"), title: `- ${blogFiles[0].split("/")[0]}`, insertTextArray: contentArr });
     }
 
     // 创建接口，用于读取用户输入
