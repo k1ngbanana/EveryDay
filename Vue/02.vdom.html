@@ -1,0 +1,42 @@
+<script>
+  let totalPrice = 0;
+  let product = { price: 20, quantity: 5 }
+  updateTotalPrice()
+
+
+  let targetMap = new WeakMap()
+  let proxiedProduct = new Proxy(product, {
+    get(target, property) {
+      console.log(`Getting value of ${property}`);
+      return target[property]
+    },
+
+    set(target, property, value) {
+      let oldValue = target[property];
+      target[property] = value;
+
+      if (oldValue !== value) {
+        // Get list of effects of dependency
+        let dep = depsMap.get(property)
+
+        // Run all the effects of this dependency
+        dep.forEach(effect => {
+          effect()
+        })
+      }
+
+      return true
+    }
+  })
+
+  function updateTotalPrice() {
+    totalPrice = product.price * product.quantity;
+  }
+
+  console.log(proxiedProduct.price) // Returns 20
+  console.log(totalPrice)
+
+  proxiedProduct.price = 50
+  console.log(product.price) // Returns 50
+  console.log(totalPrice)
+</script>

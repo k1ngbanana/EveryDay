@@ -1,0 +1,50 @@
+<script>
+  let activeEffect = null
+  class Dep {
+    subscribers = new Set()
+
+    depend() {
+      if (activeEffect) {
+        this.subscribers.add(activeEffect)
+      }
+    }
+    notify() {
+      this.subscribers.forEach(effect => effect())
+    }
+  }
+
+  function watchEffect(effect) {
+    activeEffect = effect
+    effect()
+    activeEffect = null
+  }
+
+  function reactive(raw) {
+    Object.keys(raw).forEach(key => {
+      const dep = new Dep()
+      let value = raw[key]
+
+      Object.defineProperty(raw, key, {
+        get() {
+          dep.depend()
+          return value
+        },
+        set(newValue) {
+          value = newValue
+          dep.notify()
+        }
+      })
+    })
+
+    return raw;
+  }
+
+  const state = reactive({ a: 1 })
+
+  watchEffect(() => {
+    console.log(state.a)
+  })
+
+  state.a = 'banana'
+  state.b = 'world'
+</script>

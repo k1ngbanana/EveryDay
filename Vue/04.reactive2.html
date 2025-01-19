@@ -1,0 +1,66 @@
+<script>
+  let activeEffect = null
+  class Dep {
+    subscribers = new Set()
+
+    depend() {
+      if (activeEffect) {
+        this.subscribers.add(activeEffect)
+      }
+    }
+    notify() {
+      this.subscribers.forEach(effect => effect())
+    }
+  }
+
+  function watchEffect(effect) {
+    activeEffect = effect
+    effect()
+    activeEffect = null
+  }
+
+  const targetMap = new WeakMap()
+
+  function getCurrentDep(target, key) {
+    let depsMap = targetMap.get(target)
+
+    if (!depsMap) {
+      depsMap = new Map()
+      targetMap.set(target, depsMap)
+    }
+
+    let dep = depsMap.get(key)
+    if (!dep) {
+      dep = new Dep()
+      depsMap.set(key, dep)
+    }
+
+    return depsMap.get(key)
+  }
+
+  const reactiveHandler = {
+    get(target, key, receiver) {
+      const dep = getCurrentDep(target, key)
+      dep.depend()
+
+      return Reflect.get(target, key, receiver)
+    },
+    set(target, key, newValue, receiver) {
+      const dep = getCurrentDep(target, key)
+      const res = Reflect.set(target, key, newValue, receiver);
+      dep.notify()
+      return res;
+    },
+  }
+  function reactive(raw) {
+    return new Proxy(raw, reactiveHandler)
+  }
+
+  const state = reactive({ a: 1 })
+
+  watchEffect(() => {
+    console.log(state.msg)
+  })
+
+  state.a = 'banana'
+</script>
