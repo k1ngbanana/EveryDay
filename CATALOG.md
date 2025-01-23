@@ -1,5 +1,11 @@
 # Catalog
 
+**2025-01-23**
+
+> 第 7 题：[redis](Server/redis.md)
+
+<br>
+
 **2025-01-20**
 
 > 第 6 题：[nginx](Server/nginx.md)
